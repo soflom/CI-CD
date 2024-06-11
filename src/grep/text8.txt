@@ -1,0 +1,19 @@
+The cat utility reads files sequentially, writing them to the standard output.
+Free simple bash.
+free simple bash.
+1234
+6789
+101878
+
+
+empty strokes 6
+
+
+empty strokes 2
+
+empty strokes 1
+
+
+empty strokes 3
+
+Hello
