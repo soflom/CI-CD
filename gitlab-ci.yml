@@ -1,0 +1,58 @@
+stages:
+  - build
+  - style
+  - test
+  - deploy
+
+building:
+  stage: build
+  script:
+    - cd src/cat
+    - make s21_cat
+    - cd ../grep
+    - make s21_grep
+  artifacts:
+    paths:
+      - src/cat/s21_cat
+      - src/grep/s21_grep
+    expire_in: 30 days
+  after_script:
+    - chmod +x ./notification.sh
+    - ./notification.sh
+
+style-test:
+  stage: style
+  script:
+    - cd src/cat
+    - make style
+    - cd ../grep
+    - make style
+  after_script:
+    - chmod +x ./notification.sh
+    - ./notification.sh
+
+testing:
+  stage: test
+  script: 
+    - cd src/cat
+    - make test
+    - cd ../grep
+    - make test
+  after_script:
+    - chmod +x ./notification.sh
+    - ./notification.sh
+
+deployment:
+  stage: deploy
+  when: manual
+  needs:
+    - job: building
+    - job: style-test
+    - job: testing
+      artifacts: true
+  script:
+    - chmod +x ./deploy.sh
+    - ./deploy.sh
+  after_script:
+    - chmod +x ./notification.sh
+    - ./notification.sh
